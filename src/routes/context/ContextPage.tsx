@@ -1,26 +1,32 @@
-import reactLogo from "../../assets/react.svg";
-import viteLogo from "/vite.svg";
+import { Typography } from "@mui/material";
+import { MyTable } from "../../components/table";
+import { useTableContents } from "./TableContentsContext";
 
 export default function Context() {
+  const { tableContents, setTableContents } = useTableContents();
+
+  function setTableEntry({
+    entryID,
+    entryKey,
+    entryValue,
+  }: {
+    entryID: number;
+    entryKey: string;
+    entryValue: string | number;
+  }) {
+    setTableContents((prevContents) => ({
+      ...prevContents,
+      [entryID]: {
+        ...prevContents[entryID],
+        [entryKey]: entryValue,
+      },
+    }));
+  }
+
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Typography variant="h1">Hello! This is the Context example!</Typography>
+      <MyTable tableContents={tableContents} setTableEntry={setTableEntry} />
     </>
   );
 }
