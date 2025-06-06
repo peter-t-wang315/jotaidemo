@@ -1,18 +1,47 @@
+import { Typography } from "@mui/material";
+import { MyTable } from "../../components/table";
+import { editTableContentsAtom, tableContentsAtom } from "./TableContentsAtom";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import type { TableContents } from "../context/TableContentsContext";
+
 export default function Jotai() {
+  const [tableContents, setTableContents] = useAtom(tableContentsAtom);
+  // const tableContents = useAtomValue(tableContentsAtom);
+  // const editTableContents = useSetAtom(editTableContentsAtom);
+
+  // function setTableEntry({
+  //   entryID,
+  //   entryKey,
+  //   entryValue,
+  // }: {
+  //   entryID: number;
+  //   entryKey: string;
+  //   entryValue: string | number;
+  // }) {
+  //   editTableContents({ entryID, entryKey, entryValue });
+  // }
+
+  const setTableEntry = ({
+    entryID,
+    entryKey,
+    entryValue,
+  }: {
+    entryID: number;
+    entryKey: string;
+    entryValue: string | number;
+  }) => {
+    setTableContents((draft: TableContents) => {
+      // Only update the specific entry
+      if (draft[entryID]) {
+        (draft[entryID] as any)[entryKey] = entryValue;
+      }
+    });
+  };
+
   return (
     <>
-      <div>
-        <h1>Jotai Example</h1>
-        <p>This is a simple example of using Jotai for state management.</p>
-      </div>
-      <div className="card">
-        <p>
-          Edit <code>src/routes/Jotai.tsx</code> to modify this component.
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the links to learn more about Jotai.
-      </p>
+      <Typography variant="h1">Hello! This is the Jotai example!</Typography>
+      <MyTable tableContents={tableContents} setTableEntry={setTableEntry} />
     </>
   );
 }
